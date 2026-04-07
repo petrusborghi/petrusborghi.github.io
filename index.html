@@ -6,82 +6,119 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
       background: #0f172a;
+      font-family: Arial;
       color: white;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
-      text-align: center;
     }
 
-    .container {
-      max-width: 500px;
+    .chat {
+      width: 350px;
+    }
+
+    .msg {
+      background: #1e293b;
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin: 8px 0;
+      width: fit-content;
+      max-width: 100%;
+      opacity: 0;
+    }
+
+    .typing {
+      font-style: italic;
+      opacity: 0.7;
     }
 
     a {
       color: #38bdf8;
       text-decoration: none;
-      display: block;
-      margin: 10px 0;
-    }
-
-    a:hover {
-      text-decoration: underline;
     }
 
     .btn {
-      background: #22c55e;
-      padding: 10px;
-      border-radius: 8px;
       display: inline-block;
+      margin-top: 5px;
+      background: #22c55e;
+      padding: 8px;
+      border-radius: 6px;
       color: white;
-      margin-top: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h2>Oi, tudo bem? 👋👨🏻‍💻</h2>
-
-  <p><strong>Sou o Petrus Borghi</strong></p>
-
-  <p>
-    Sou formado em Ciência da Computação, Pedagogia e pós-graduado em
-    Tecnologias aplicadas à educação presencial
-  </p>
-
-  <p>Você pode falar comigo pelo email:</p>
-  <a href="mailto:phborghif@gmail.com">phborghif@gmail.com</a>
-
-  <p>E também baixar meu currículo aqui 📝</p>
-  <a href="curriculo.pdf" download class="btn">Baixar currículo</a>
-
-  <p>Ou me encontrar nesses lugares:</p>
-  <a href="https://www.instagram.com/petrushbf/" target="_blank">Instagram</a>
-  <a href="https://wa.me/5517981365625" target="_blank">WhatsApp</a>
-
-  <p id="mensagemTempo"></p>
-
-  <p>Obrigado pela visita 🙏</p>
-</div>
+<div class="chat" id="chat"></div>
 
 <script>
-  const hora = new Date().getHours();
-  let mensagem = "";
+  const chat = document.getElementById("chat");
 
-  if (hora < 12) {
-    mensagem = "Tenha um bom dia ☀️";
-  } else if (hora < 18) {
-    mensagem = "Tenha uma boa tarde 🌤️";
-  } else {
-    mensagem = "Tenha uma boa noite 🌙";
+  function criarMensagem(html) {
+    const div = document.createElement("div");
+    div.className = "msg";
+    div.innerHTML = html;
+    chat.appendChild(div);
+
+    setTimeout(() => {
+      div.style.opacity = 1;
+    }, 100);
+
+    return div;
   }
 
-  document.getElementById("mensagemTempo").innerText = mensagem;
+  function digitando() {
+    const div = document.createElement("div");
+    div.className = "msg typing";
+    div.innerText = "digitando...";
+    chat.appendChild(div);
+    return div;
+  }
+
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function iniciar() {
+
+    let hora = new Date().getHours();
+    let saudacao = "";
+
+    if (hora < 12) saudacao = "Tenha um bom dia ☀️";
+    else if (hora < 18) saudacao = "Tenha uma boa tarde 🌤️";
+    else saudacao = "Tenha uma boa noite 🌙";
+
+    let t;
+
+    t = digitando(); await delay(1200); t.remove();
+    criarMensagem("Oi, tudo bem? 👋👨🏻‍💻");
+
+    t = digitando(); await delay(1200); t.remove();
+    criarMensagem("<strong>Sou o Petrus Borghi</strong>");
+
+    t = digitando(); await delay(1500); t.remove();
+    criarMensagem("Sou formado em Ciência da Computação, Pedagogia e pós-graduado em Tecnologias aplicadas à educação presencial");
+
+    t = digitando(); await delay(1200); t.remove();
+    criarMensagem("Você pode falar comigo pelo email:<br><a href='mailto:phborghif@gmail.com'>phborghif@gmail.com</a>");
+
+    t = digitando(); await delay(1200); t.remove();
+    criarMensagem("Baixar meu currículo aqui 📝<br><a href='curriculo.pdf' download class='btn'>Baixar currículo</a>");
+
+    t = digitando(); await delay(1200); t.remove();
+    criarMensagem("Ou me encontrar nesses lugares:<br><a href='https://www.instagram.com/petrushbf/' target='_blank'>Instagram</a><br><a href='https://wa.me/5517981365625' target='_blank'>WhatsApp</a>");
+
+    t = digitando(); await delay(1200); t.remove();
+    criarMensagem(saudacao);
+
+    t = digitando(); await delay(1000); t.remove();
+    criarMensagem("Obrigado pela visita 🙏");
+  }
+
+  iniciar();
 </script>
 
 </body>
