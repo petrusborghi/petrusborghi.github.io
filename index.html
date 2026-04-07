@@ -1,124 +1,211 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Petrus Borghi</title>
+<meta charset="UTF-8">
+<title>Petrus Borghi</title>
 
-  <style>
-    body {
-      background: #0f172a;
-      font-family: Arial;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    .chat {
-      width: 350px;
-    }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top, #1e293b, #020617);
+    color: white;
+  }
 
-    .msg {
-      background: #1e293b;
-      padding: 10px 15px;
-      border-radius: 10px;
-      margin: 8px 0;
-      width: fit-content;
-      max-width: 100%;
+  .container {
+    width: 360px;
+    height: 600px;
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 0 40px rgba(56,189,248,0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: url('https://i.imgur.com/6VBx3io.png');
+    background-size: cover;
+  }
+
+  .name {
+    font-weight: bold;
+  }
+
+  .status {
+    font-size: 12px;
+    color: #22c55e;
+  }
+
+  .chat {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .msg {
+    max-width: 80%;
+    padding: 10px 14px;
+    margin: 8px 0;
+    border-radius: 12px;
+    animation: fadeIn 0.4s ease;
+    line-height: 1.4;
+  }
+
+  .left {
+    background: #1e293b;
+  }
+
+  .right {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    color: black;
+    align-self: flex-end;
+  }
+
+  .typing {
+    font-size: 13px;
+    opacity: 0.6;
+    font-style: italic;
+  }
+
+  a {
+    color: #38bdf8;
+    text-decoration: none;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 5px;
+    background: #22c55e;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: black;
+    font-weight: bold;
+  }
+
+  @keyframes fadeIn {
+    from {
+      transform: translateY(10px);
       opacity: 0;
     }
-
-    .typing {
-      font-style: italic;
-      opacity: 0.7;
+    to {
+      transform: translateY(0);
+      opacity: 1;
     }
-
-    a {
-      color: #38bdf8;
-      text-decoration: none;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 5px;
-      background: #22c55e;
-      padding: 8px;
-      border-radius: 6px;
-      color: white;
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
 
-<div class="chat" id="chat"></div>
+<div class="container">
+  <div class="header">
+    <div class="avatar"></div>
+    <div>
+      <div class="name">Petrus Borghi</div>
+      <div class="status">online</div>
+    </div>
+  </div>
+
+  <div class="chat" id="chat"></div>
+</div>
 
 <script>
-  const chat = document.getElementById("chat");
+const chat = document.getElementById("chat");
 
-  function criarMensagem(html) {
-    const div = document.createElement("div");
-    div.className = "msg";
-    div.innerHTML = html;
-    chat.appendChild(div);
+function criarMsg(classe) {
+  const div = document.createElement("div");
+  div.className = "msg " + classe;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
 
-    setTimeout(() => {
-      div.style.opacity = 1;
-    }, 100);
+function digitando() {
+  const div = criarMsg("left typing");
+  div.innerText = "digitando...";
+  return div;
+}
 
-    return div;
+function delay(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+async function escreverTexto(elemento, texto, velocidade = 25) {
+  for (let i = 0; i < texto.length; i++) {
+    elemento.innerHTML += texto[i];
+    await delay(velocidade);
   }
+}
 
-  function digitando() {
-    const div = document.createElement("div");
-    div.className = "msg typing";
-    div.innerText = "digitando...";
-    chat.appendChild(div);
-    return div;
-  }
+async function iniciar() {
 
-  function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  let hora = new Date().getHours();
+  let saudacao = hora < 12 ? "Bom dia ☀️" :
+                  hora < 18 ? "Boa tarde 🌤️" :
+                  "Boa noite 🌙";
 
-  async function iniciar() {
+  let t;
 
-    let hora = new Date().getHours();
-    let saudacao = "";
+  t = digitando(); await delay(1000); t.remove();
+  let m1 = criarMsg("left");
+  await escreverTexto(m1, "Oi, tudo bem? 👋👨🏻‍💻");
 
-    if (hora < 12) saudacao = "Tenha um bom dia ☀️";
-    else if (hora < 18) saudacao = "Tenha uma boa tarde 🌤️";
-    else saudacao = "Tenha uma boa noite 🌙";
+  t = digitando(); await delay(1000); t.remove();
+  let m2 = criarMsg("right");
+  await escreverTexto(m2, "Sou o Petrus Borghi");
 
-    let t;
+  t = digitando(); await delay(1200); t.remove();
+  let m3 = criarMsg("left");
+  await escreverTexto(m3, "Formado em Ciência da Computação, Pedagogia e pós em Tecnologias aplicadas à educação.");
 
-    t = digitando(); await delay(1200); t.remove();
-    criarMensagem("Oi, tudo bem? 👋👨🏻‍💻");
+  t = digitando(); await delay(1000); t.remove();
+  let m4 = criarMsg("left");
+  m4.innerHTML = "Fale comigo:<br><a href='mailto:phborghif@gmail.com'>phborghif@gmail.com</a>";
 
-    t = digitando(); await delay(1200); t.remove();
-    criarMensagem("<strong>Sou o Petrus Borghi</strong>");
+  t = digitando(); await delay(1000); t.remove();
+  let m5 = criarMsg("left");
+  m5.innerHTML = "Baixar currículo 📝<br><a class='btn' href='curriculo.pdf' download>Download</a>";
 
-    t = digitando(); await delay(1500); t.remove();
-    criarMensagem("Sou formado em Ciência da Computação, Pedagogia e pós-graduado em Tecnologias aplicadas à educação presencial");
+  t = digitando(); await delay(1000); t.remove();
+  let m6 = criarMsg("left");
+  m6.innerHTML = `
+    Me encontre:<br>
+    <a href="https://www.instagram.com/petrushbf/" target="_blank">Instagram</a><br>
+    <a href="https://wa.me/5517981365625" target="_blank">WhatsApp</a>
+  `;
 
-    t = digitando(); await delay(1200); t.remove();
-    criarMensagem("Você pode falar comigo pelo email:<br><a href='mailto:phborghif@gmail.com'>phborghif@gmail.com</a>");
+  t = digitando(); await delay(1000); t.remove();
+  let m7 = criarMsg("right");
+  await escreverTexto(m7, saudacao);
 
-    t = digitando(); await delay(1200); t.remove();
-    criarMensagem("Baixar meu currículo aqui 📝<br><a href='curriculo.pdf' download class='btn'>Baixar currículo</a>");
+  t = digitando(); await delay(800); t.remove();
+  let m8 = criarMsg("left");
+  await escreverTexto(m8, "Obrigado pela visita 🙏");
+}
 
-    t = digitando(); await delay(1200); t.remove();
-    criarMensagem("Ou me encontrar nesses lugares:<br><a href='https://www.instagram.com/petrushbf/' target='_blank'>Instagram</a><br><a href='https://wa.me/5517981365625' target='_blank'>WhatsApp</a>");
-
-    t = digitando(); await delay(1200); t.remove();
-    criarMensagem(saudacao);
-
-    t = digitando(); await delay(1000); t.remove();
-    criarMensagem("Obrigado pela visita 🙏");
-  }
-
-  iniciar();
+iniciar();
 </script>
 
 </body>
