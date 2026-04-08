@@ -24,14 +24,13 @@ body {
   color: white;
 }
 
-/* FUNDO ANIMADO */
 @keyframes bgMove {
   0% { background-position: 0% }
   50% { background-position: 100% }
   100% { background-position: 0% }
 }
 
-/* CONTAINER RESPONSIVO */
+/* CONTAINER */
 .container {
   width: 95%;
   max-width: 420px;
@@ -54,12 +53,38 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
+.avatar-container {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  cursor: pointer;
+}
+
 .avatar {
-  width: 42px;
-  height: 42px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  background: url('https://i.imgur.com/6VBx3io.png');
+  background: url('foto.jpg');
   background-size: cover;
+  background-position: center;
+  animation: borderAnim 4s linear infinite;
+}
+
+@keyframes borderAnim {
+  0% { box-shadow: 0 0 0px #22c55e; }
+  50% { box-shadow: 0 0 12px #22c55e; }
+  100% { box-shadow: 0 0 0px #22c55e; }
+}
+
+.online {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: #22c55e;
+  border-radius: 50%;
+  border: 2px solid #0f172a;
 }
 
 .name {
@@ -96,7 +121,6 @@ body {
   font-size: 14px;
   line-height: 1.4;
   animation: fadeIn 0.4s ease;
-  word-wrap: break-word;
 }
 
 .left {
@@ -109,14 +133,12 @@ body {
   align-self: flex-end;
 }
 
-/* DIGITANDO */
 .typing {
   font-size: 13px;
   opacity: 0.6;
   font-style: italic;
 }
 
-/* LINKS */
 a {
   color: #38bdf8;
   text-decoration: none;
@@ -124,7 +146,6 @@ a {
   margin-top: 5px;
 }
 
-/* BOTÕES GRANDES PRA CELULAR */
 .btn {
   display: block;
   margin-top: 8px;
@@ -136,13 +157,12 @@ a {
   font-weight: bold;
 }
 
-/* ANIMAÇÃO */
 @keyframes fadeIn {
   from {transform: translateY(10px); opacity: 0;}
   to {transform: translateY(0); opacity: 1;}
 }
 
-/* MOBILE EXTRA */
+/* MOBILE */
 @media (max-width: 480px) {
   .container {
     height: 100vh;
@@ -160,7 +180,11 @@ a {
 
 <div class="container">
   <div class="header">
-    <div class="avatar"></div>
+    <div class="avatar-container" onclick="abrirFoto()">
+      <div class="avatar"></div>
+      <div class="online"></div>
+    </div>
+
     <div>
       <div class="name">Petrus Borghi</div>
       <div class="status">online</div>
@@ -168,6 +192,26 @@ a {
   </div>
 
   <div class="chat" id="chat"></div>
+</div>
+
+<!-- MODAL FOTO -->
+<div id="modalFoto" style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+">
+  <img src="foto.jpg" style="
+    width:90%;
+    max-width:400px;
+    border-radius:15px;
+  ">
 </div>
 
 <script>
@@ -198,6 +242,14 @@ async function escrever(el, texto, vel = 20) {
   }
 }
 
+function abrirFoto() {
+  document.getElementById("modalFoto").style.display = "flex";
+}
+
+document.getElementById("modalFoto").onclick = function() {
+  this.style.display = "none";
+}
+
 async function iniciar() {
 
   let h = new Date().getHours();
@@ -217,7 +269,7 @@ async function iniciar() {
 
   t = digitando(); await delay(1000); t.remove();
   let m3 = criarMsg("left");
-  await escrever(m3, "Formado em Ciência da Computação, Pedagogia e pós em Tecnologias aplicadas à educação presencial.");
+  await escrever(m3, "Formado em Ciência da Computação, Pedagogia e pós em Tecnologias aplicadas à educação.");
 
   t = digitando(); await delay(900); t.remove();
   let m4 = criarMsg("left");
