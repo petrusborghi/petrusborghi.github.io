@@ -28,7 +28,6 @@ body {
   height: 95vh;
   max-height: 740px;
   width: auto;
-
   background: #000;
   border-radius: 50px;
   padding: 10px;
@@ -39,7 +38,7 @@ body {
 /* NOTCH */
 .notch {
   position: absolute;
-  top: 8px;
+  top: 6px;
   left: 50%;
   transform: translateX(-50%);
   width: 140px;
@@ -61,19 +60,87 @@ body {
 
 /* STATUS BAR */
 .statusbar {
-  height: 28px;
+  height: 32px;
   background: #075E54;
   color: white;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 0 12px;
+  padding-top: 6px;
+  font-size: 13px;
+}
+
+.time {
+  font-weight: 500;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* SINAL */
+.signal {
+  width: 16px;
+  height: 10px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.signal::before,
+.signal::after {
+  content: "";
+  display: block;
+  width: 3px;
+  background: white;
+  border-radius: 1px;
+}
+
+.signal::before { height: 6px; }
+.signal::after { height: 10px; }
+
+/* WIFI */
+.wifi {
+  width: 14px;
+  height: 10px;
+  border: 2px solid white;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+}
+
+/* BATERIA */
+.battery {
+  width: 22px;
+  height: 10px;
+  border: 1.5px solid white;
+  border-radius: 2px;
+  position: relative;
+}
+
+.battery::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 2px;
+  width: 2px;
+  height: 5px;
+  background: white;
+  border-radius: 1px;
+}
+
+.level {
+  width: 70%;
+  height: 100%;
+  background: white;
 }
 
 /* HEADER */
 .header {
   background: #075E54;
-  padding: 8px;
+  padding: 10px 10px 8px 10px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -111,7 +178,7 @@ body {
   background: #ece5dd;
 }
 
-/* MENSAGEM */
+/* MENSAGENS */
 .msg {
   background: #DCF8C6;
   padding: 10px;
@@ -192,8 +259,15 @@ body {
   <div class="screen">
 
     <div class="statusbar">
-      <div id="hora"></div>
-      <div>📶 🔋</div>
+      <div class="time" id="hora"></div>
+
+      <div class="icons">
+        <div class="signal"></div>
+        <div class="wifi"></div>
+        <div class="battery">
+          <div class="level"></div>
+        </div>
+      </div>
     </div>
 
     <div class="header">
@@ -282,7 +356,7 @@ function abrirWhats(){
   window.open("https://wa.me/5517981365625", "_blank");
 }
 
-/* HORA */
+/* HORA REAL */
 function atualizarHora(){
   let d = new Date();
   let h = d.getHours().toString().padStart(2,'0');
