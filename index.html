@@ -21,46 +21,69 @@ body {
   height: 100vh;
 }
 
-/* IPHONE */
+/* IPHONE BODY */
 .phone {
   width: 360px;
-  height: 720px;
-  background: black;
-  border-radius: 40px;
-  padding: 8px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.8);
+  height: 740px;
+  background: #000;
+  border-radius: 50px;
+  padding: 10px;
+  position: relative;
+  box-shadow: 0 0 60px rgba(0,0,0,0.9);
 }
 
+/* NOTCH */
+.notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 25px;
+  background: black;
+  border-radius: 20px;
+  z-index: 10;
+}
+
+/* SCREEN */
 .screen {
   width: 100%;
   height: 100%;
-  border-radius: 30px;
+  border-radius: 40px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
+/* STATUS BAR */
+.statusbar {
+  height: 30px;
+  background: #075E54;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
 /* HEADER */
 .header {
   background: #075E54;
-  padding: 10px;
+  padding: 8px;
   display: flex;
   align-items: center;
   gap: 10px;
   color: white;
 }
 
-/* FOTO */
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: url('foto.jpg');
   background-size: cover;
-  background-position: center;
 }
 
-/* ONLINE */
 .info {
   display: flex;
   flex-direction: column;
@@ -80,26 +103,23 @@ body {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
-
-  /* FUNDO WHATS LIMPO */
   background: #ece5dd;
 }
 
-/* MENSAGEM */
+/* MSG */
 .msg {
   background: #DCF8C6;
-  color: black;
   padding: 10px;
   border-radius: 10px;
   margin: 6px 0;
   max-width: 80%;
   font-size: 14px;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.3s;
 }
 
 .typing {
-  font-style: italic;
   opacity: 0.6;
+  font-style: italic;
 }
 
 /* INPUT */
@@ -123,13 +143,29 @@ body {
   padding: 10px 14px;
   border-radius: 50%;
   color: white;
-  cursor: pointer;
+}
+
+/* HOME BAR */
+.homebar {
+  height: 20px;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.homebar::after {
+  content: "";
+  width: 100px;
+  height: 5px;
+  background: #555;
+  border-radius: 10px;
 }
 
 /* ANIMAÇÃO */
 @keyframes fadeIn {
   from {opacity:0; transform:translateY(10px);}
-  to {opacity:1; transform:translateY(0);}
+  to {opacity:1;}
 }
 
 /* MOBILE */
@@ -146,7 +182,14 @@ body {
 <body>
 
 <div class="phone">
+  <div class="notch"></div>
+
   <div class="screen">
+
+    <div class="statusbar">
+      <div id="hora"></div>
+      <div>📶 🔋</div>
+    </div>
 
     <div class="header">
       <div class="avatar"></div>
@@ -162,6 +205,8 @@ body {
       <input type="text" placeholder="Digite uma mensagem">
       <button onclick="abrirWhats()">➤</button>
     </div>
+
+    <div class="homebar"></div>
 
   </div>
 </div>
@@ -231,6 +276,17 @@ async function iniciar(){
 function abrirWhats(){
   window.open("https://wa.me/5517981365625", "_blank");
 }
+
+/* HORA REAL */
+function atualizarHora(){
+  let d = new Date();
+  let h = d.getHours().toString().padStart(2,'0');
+  let m = d.getMinutes().toString().padStart(2,'0');
+  document.getElementById("hora").innerText = h + ":" + m;
+}
+
+setInterval(atualizarHora, 1000);
+atualizarHora();
 
 iniciar();
 </script>
